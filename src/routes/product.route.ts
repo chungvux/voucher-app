@@ -7,7 +7,7 @@ import {
     deleteProduct
 } from "../controllers/product.controller"
 
-export const product = (server: Server) => {
+export const product = async (server: Server) => {
 
     server.route({
         method: 'GET',

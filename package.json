@@ -26,10 +26,15 @@
   "homepage": "https://github.com/chungvux/voucher-app#readme",
   "dependencies": {
     "@hapi/hapi": "^20.2.1",
+    "@hapi/vision": "^6.1.0",
+    "agenda": "^4.2.1",
     "bluebird": "^3.7.2",
     "bull": "^3.29.3",
+    "handlebars": "^4.7.7",
     "mongoose": "^6.0.11",
-    "redis": "^3.1.2"
+    "nodemailer": "^6.7.0",
+    "redis": "^3.1.2",
+    "vision": "^5.4.4"
   },
   "devDependencies": {
     "@types/bull": "^3.15.5",

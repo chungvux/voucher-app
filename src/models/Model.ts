@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const ProductSchema = new mongoose.Schema({ name: String, max_quantity: Number, thumbnail: String })
-const VoucherSchema = new mongoose.Schema({ name: String, quantity: Number })
+const VoucherSchema = new mongoose.Schema({ name: String, quantity: Number, email: String })
 
 
 
