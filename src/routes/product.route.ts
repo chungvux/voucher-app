@@ -55,6 +55,11 @@ export const product = async (server: Server) => {
             validate: {
                 params: Joi.object().keys({
                     id: Joi.string().min(5)
+                }),
+                payload: Joi.object().keys({
+                    name: Joi.string().min(5),
+                    max_quantity: Joi.number().integer().greater(0),
+                    thumbnail: Joi.string().min(5)
                 })
             }
         }

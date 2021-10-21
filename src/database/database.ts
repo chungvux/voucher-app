@@ -22,7 +22,9 @@ agenda.start()
 mongoose.connect(addressDatabase)
     .then(() => {
         console.log("Connected successfully")
-        agenda.every('1 minute', 'checkdatabase')
+        agenda.on('ready', () => {
+            agenda.every('1 minute', 'checkdatabase')
+        })
     })
     .catch(() => console.log("Error connecting"))
 

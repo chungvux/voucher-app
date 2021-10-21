@@ -43,7 +43,7 @@ export const voucher = (server: Server) => {
                 payload: Joi.object().keys({
                     name: Joi.string().min(5),
                     quantity: Joi.number().integer().greater(0),
-                    email: Joi.string().min(5)
+                    email: Joi.string().min(5).regex(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
                 })
             }
         }
