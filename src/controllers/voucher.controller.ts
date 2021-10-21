@@ -118,7 +118,7 @@ export const getAllVouchers = async (req: Request, res: ResponseToolkit) => {
 export const getOneVoucher = async (req: Request, res: ResponseToolkit) => {
     try {
         const user = await VoucherModel.findById(req.params.id)
-        return res.response(user)
+        return res.response(user).code(200)
     } catch (error) {
         console.log(error)
     }
@@ -135,7 +135,7 @@ export const updateVoucher = async (req: Request, res: ResponseToolkit) => {
 export const tempIDVoucher = async (req: Request, res: ResponseToolkit) => {
     const product = await client.getAsync(req.params.id)
     if (product) {
-        return res.response("Other people is oddering, please wait...")
+        return res.response("Other people is oddering, please wait...").code(409)
     } else {
         await client.setAsync(req.params.id, req.params.id)
 
@@ -146,7 +146,8 @@ export const tempIDVoucher = async (req: Request, res: ResponseToolkit) => {
         
         await agenda.schedule('1 minute', 'deleteID')
 
-        return await client.getAsync(req.params.id)
+        await client.getAsync(req.params.id)
+        return res.response(req.params.id).code(200)
     }
 }
 
