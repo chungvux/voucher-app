@@ -64,7 +64,7 @@ export const addVoucher = async (req: AddVoucherRequest, res: ResponseToolkit) =
         if (product) {
             const max_quantity = Number(product.max_quantity)
             const quantity = Number(req.payload.quantity)
-            if (max_quantity > quantity) {
+            if (max_quantity >= quantity) {
                 const sessionVoucher = await VoucherModel.startSession()
                 sessionVoucher.startTransaction()
                 const optVoucher = { sessionVoucher }
@@ -91,13 +91,13 @@ export const addVoucher = async (req: AddVoucherRequest, res: ResponseToolkit) =
                 await sessionProduct.abortTransaction()
                 sessionProduct.endSession()
 
-                return res.response("Not enough item")
+                return res.response("Not enough item").code(400)
             }
         } else {
             await sessionProduct.abortTransaction()
             sessionProduct.endSession()
 
-            return res.response("have no item")
+            return res.response("have no item").code(404)
         }
     } catch (error) {
         await sessionProduct.abortTransaction()
@@ -110,7 +110,7 @@ export const addVoucher = async (req: AddVoucherRequest, res: ResponseToolkit) =
 export const getAllVouchers = async (req: Request, res: ResponseToolkit) => {
     try {
         const users = await VoucherModel.find()
-        return res.response(users)
+        return res.response(users).code(200)
     } catch (error) {
         console.log(error)
     }
@@ -126,7 +126,7 @@ export const getOneVoucher = async (req: Request, res: ResponseToolkit) => {
 export const updateVoucher = async (req: Request, res: ResponseToolkit) => {
     try {
         const user = await VoucherModel.findByIdAndUpdate(req.params.id, req.payload)
-        return res.response(user)
+        return res.response(user).code(200)
     } catch (error) {
         console.log(error)
     }
