@@ -67,12 +67,10 @@ export const addVoucher = async (req: AddVoucherRequest, res: ResponseToolkit) =
             if (max_quantity >= quantity) {
                 const sessionVoucher = await VoucherModel.startSession()
                 sessionVoucher.startTransaction()
-                const optVoucher = { sessionVoucher }
-                
-                const left_quantity: number = max_quantity - quantity
+                const optVoucher = { sessionVoucher }                
 
                 const voucher = await new VoucherModel(req.payload).save(optVoucher)
-                const updateProduct = await ProductModel.findByIdAndUpdate(idProduct, { max_quantity: left_quantity })
+                const updateProduct = await ProductModel.findByIdAndUpdate(idProduct, { $inc: { max_quantity: - quantity } })
                 const email = req.payload.email
                 product.max_quantity = quantity
 
@@ -110,7 +108,11 @@ export const addVoucher = async (req: AddVoucherRequest, res: ResponseToolkit) =
 export const getAllVouchers = async (req: Request, res: ResponseToolkit) => {
     try {
         const users = await VoucherModel.find()
-        return res.response(users).code(200)
+        if (users) {
+            return res.response(users).code(200)
+        } else {
+            return res.response("null users").code(404)
+        }
     } catch (error) {
         console.log(error)
     }
@@ -118,7 +120,11 @@ export const getAllVouchers = async (req: Request, res: ResponseToolkit) => {
 export const getOneVoucher = async (req: Request, res: ResponseToolkit) => {
     try {
         const user = await VoucherModel.findById(req.params.id)
-        return res.response(user).code(200)
+        if (user) {
+            return res.response(user).code(200)
+        } else {
+            return res.response("null user").code(404)
+        }
     } catch (error) {
         console.log(error)
     }
@@ -127,6 +133,7 @@ export const updateVoucher = async (req: Request, res: ResponseToolkit) => {
     try {
         const user = await VoucherModel.findByIdAndUpdate(req.params.id, req.payload)
         return res.response(user).code(200)
+        
     } catch (error) {
         console.log(error)
     }
@@ -141,7 +148,6 @@ export const tempIDVoucher = async (req: Request, res: ResponseToolkit) => {
 
         agenda.define('deleteID', (job: Job, done: Function) => {
             deleteID(req.params.id)
-            done()
         })
         
         await agenda.schedule('1 minute', 'deleteID')

@@ -5,7 +5,8 @@ const { product } = require('./routes/product.route')
 const Inert = require('@hapi/inert')
 const Vision = require('@hapi/vision')
 const HapiSwagger = require('hapi-swagger')
-const Pack = require('../package.json')
+
+const { dependencies } = require('../package.json')
 
 
 
@@ -23,8 +24,8 @@ export const init = async () => {
 
     const swaggerOptions = {
         info: {
-            title: 'Test API Documentation',
-            version: Pack.version,
+            title: 'Hapi/MongoDB/Bull/Agenda CRUD API Documentation',
+            version: dependencies["hapi-swagger"],
         },
     }
 

@@ -13,18 +13,18 @@ const agenda = new Agenda({
 })
 
 agenda.define('checkdatabase', (job: Job, done: Function) => {
-    console.log('Check database successfully')
+    mongoose.connect(addressDatabase)
+        .then(() => {
+            console.log("Connected successfully")
+        })
+        .catch(() => console.log("Error connecting"))
     done()
 })
 
 agenda.start()
 
-mongoose.connect(addressDatabase)
-    .then(() => {
-        console.log("Connected successfully")
-        agenda.on('ready', () => {
-            agenda.every('1 minute', 'checkdatabase')
-        })
-    })
-    .catch(() => console.log("Error connecting"))
 
+
+agenda.on('ready', () => {
+    agenda.every('1 minute', 'checkdatabase')
+})

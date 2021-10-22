@@ -40,7 +40,7 @@ export const product = async (server: Server) => {
             validate: {
                 payload: Joi.object().keys({
                     name: Joi.string().min(5).error((err: Error) => console.log(err)),
-                    max_quantity: Joi.number().integer().greater(0),
+                    max_quantity: Joi.number().integer().min(5),
                     thumbnail: Joi.string().min(5)
                 })
             }

@@ -22,8 +22,13 @@ export const addProduct = async (req: Request, res: ResponseToolkit) => {
 
 export const getAllProducts = async (req: Request, res: ResponseToolkit) => {
     try {
-        const users = await ProductModel.find()        
-        return res.response(users).code(200)
+        const users = await ProductModel.find()
+        if (users) {
+            return res.response(users).code(200)
+        } else {
+            return res.response("Null users").code(404)
+        }
+
     } catch (error) {
         console.log(error)
     }
@@ -31,7 +36,12 @@ export const getAllProducts = async (req: Request, res: ResponseToolkit) => {
 export const getOneProduct = async (req: Request, res: ResponseToolkit) => {
     try {
         const user = await ProductModel.findById(req.params.id)
-        return res.response(user).code(200)
+        if (user) {
+            return res.response(user).code(200)
+        } else {
+            return res.response("null user").code(404)
+        }
+
     } catch (error) {
         console.log(error)
     }
@@ -47,7 +57,11 @@ export const updateProduct = async (req: Request, res: ResponseToolkit) => {
 export const deleteProduct = async (req: Request, res: ResponseToolkit) => {
     try {
         const user = await ProductModel.findByIdAndDelete(req.params.id)
-        return res.response(user).code(200)
+        if (user) {
+            return res.response(user).code(200)
+        } else {
+            return res.response("null ID").code(404)
+        }
     } catch (error) {
         console.log(error)
     }
