@@ -64,13 +64,10 @@ export const addVoucher = async (req: AddVoucherRequest, res: ResponseToolkit) =
         if (product) {
             const max_quantity = Number(product.max_quantity)
             const quantity = Number(req.payload.quantity)
-            if (max_quantity >= quantity) {
-                const sessionVoucher = await VoucherModel.startSession()
-                sessionVoucher.startTransaction()
-                const optVoucher = { sessionVoucher }                
+            if (max_quantity >= quantity) {               
 
-                const voucher = await new VoucherModel(req.payload).save(optVoucher)
-                const updateProduct = await ProductModel.findByIdAndUpdate(idProduct, { $inc: { max_quantity: - quantity } })
+                const voucher = await new VoucherModel(req.payload).save()
+                const updateProduct = await ProductModel.findByIdAndUpdate(idProduct, { $inc: { max_quantity: - quantity } }, optProduct)
                 const email = req.payload.email
                 product.max_quantity = quantity
 
@@ -80,8 +77,6 @@ export const addVoucher = async (req: AddVoucherRequest, res: ResponseToolkit) =
                 }
                 await sendMailQueue.add(data, options)
 
-                await sessionVoucher.commitTransaction()
-                sessionVoucher.endSession()
                 const time = new Date()
 
                 return res.response({ voucher, updateProduct, email, time})
