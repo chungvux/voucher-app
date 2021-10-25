@@ -78,7 +78,8 @@ export const addVoucher = async (req: AddVoucherRequest, res: ResponseToolkit) =
                 await sendMailQueue.add(data, options)
 
                 const time = new Date()
-
+                await sessionProduct.commitTransaction()
+                sessionProduct.endSession()
                 return res.response({ voucher, updateProduct, email, time})
             } else {
                 await sessionProduct.abortTransaction()
